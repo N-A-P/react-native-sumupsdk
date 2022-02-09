@@ -2,6 +2,6 @@
 
 import { NativeModules } from 'react-native';
 
-const { ReactNativeSumupsdk } = NativeModules;
+const { RNSumupSDK } = NativeModules;
 
-export default ReactNativeSumupsdk;
+export default RNSumupSDK;

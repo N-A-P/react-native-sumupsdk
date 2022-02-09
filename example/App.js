@@ -9,25 +9,22 @@
  */
 
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { Button, Platform, StyleSheet, Text, View } from 'react-native';
 import ReactNativeSumupsdk from 'react-native-sumupsdk';
 
-export default class App extends Component<{}> {
+export default class App extends Component {
   state = {
     status: 'starting',
     message: '--'
   };
-  componentDidMount() {
-    ReactNativeSumupsdk.sampleMethod('Testing', 123, (message) => {
-      this.setState({
-        status: 'native callback received',
-        message
-      });
-    });
+  pressed() {
+    ReactNativeSumupsdk.test('keynw dkljnd kljakajs kkj' );
+    console.log(ReactNativeSumupsdk);
   }
   render() {
     return (
       <View style={styles.container}>
+        <Button title='Test' onPress={this.pressed} />
         <Text style={styles.welcome}>☆ReactNativeSumupsdk example☆</Text>
         <Text style={styles.instructions}>STATUS: {this.state.status}</Text>
         <Text style={styles.welcome}>☆NATIVE CALLBACK MESSAGE☆</Text>
