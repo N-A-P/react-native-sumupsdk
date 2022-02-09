@@ -20,7 +20,9 @@
 @interface RCT_EXTERN_MODULE(RNSumupSDK, NSObject)
 
   RCT_EXTERN_METHOD(test:(NSString *)key
-               
+                    Resolver:( RCTPromiseResolveBlock) resolve
+                    Rejecter:( RCTPromiseRejectBlock) reject
+
                     )
  
 

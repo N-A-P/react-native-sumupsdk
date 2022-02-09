@@ -17,9 +17,15 @@ export default class App extends Component {
     status: 'starting',
     message: '--'
   };
-  pressed() {
-    ReactNativeSumupsdk.test('keynw dkljnd kljakajs kkj' );
-    console.log(ReactNativeSumupsdk);
+  async pressed() {
+    try {
+      
+    const returnVal = await ReactNativeSumupsdk.test('keynw dkljnd kljakajs kkj' )
+    console.log("SUCCESS",returnVal);
+    } catch (error) {
+     console.log("ERROR", error); 
+    }
+    
   }
   render() {
     return (
