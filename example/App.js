@@ -8,36 +8,75 @@
  * https://github.com/facebook/react-native
  */
 
-import React, { Component } from 'react';
-import { Button, Platform, StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import {Button, StyleSheet, Text, View} from 'react-native';
 import ReactNativeSumupsdk from 'react-native-sumupsdk';
 
-export default class App extends Component {
-  state = {
-    status: 'starting',
-    message: '--'
+const AFFILIATE_API_KEY = 'YOUR_API_KEY';
+const ACCESS_TOKEN = 'ACCESS_TOKEN';
+
+
+export function App() {
+
+  const pressed = async () => {
+    // try {
+    // } catch (error) {
+    //   console.log('ERROR', error);
+    // }
   };
-  async pressed() {
+
+  const requestPayment = async () => {
     try {
-      
-    const returnVal = await ReactNativeSumupsdk.test('keynw dkljnd kljakajs kkj' )
-    console.log("SUCCESS",returnVal);
+      await ReactNativeSumupsdk.requestPayment(
+        '15.4',
+        'Title test',
+        true,
+        `foreginTransactionID ${Math.random()}`, // make sure it unique
+      );
     } catch (error) {
-     console.log("ERROR", error); 
+      console.log('ERROR ', error);
     }
-    
-  }
-  render() {
-    return (
-      <View style={styles.container}>
-        <Button title='Test' onPress={this.pressed} />
-        <Text style={styles.welcome}>☆ReactNativeSumupsdk example☆</Text>
-        <Text style={styles.instructions}>STATUS: {this.state.status}</Text>
-        <Text style={styles.welcome}>☆NATIVE CALLBACK MESSAGE☆</Text>
-        <Text style={styles.instructions}>{this.state.message}</Text>
-      </View>
-    );
-  }
+  };
+
+  const login = async () => {
+    try {
+      const res = await ReactNativeSumupsdk.loginWithToken(ACCESS_TOKEN);
+      console.log(' login ok ', res);
+    } catch (error) {
+      console.log('ERROR login', error);
+    }
+  };
+
+  const setup = async () => {
+    try {
+      const res = await ReactNativeSumupsdk.setupWithKey(AFFILIATE_API_KEY);
+      console.log(' Setup ok ', res);
+    } catch (error) {
+      console.log('ERROR ', error);
+    }
+  };
+
+  const setupAndLogin = async () => {
+    try {
+      const res = await ReactNativeSumupsdk.setupAndLogin(
+        AFFILIATE_API_KEY,
+        ACCESS_TOKEN,
+      );
+      console.log(' Setup and login ok ', res);
+    } catch (error) {
+      console.log('ERROR ', error);
+    }
+  };
+  return (
+    <View style={styles.container}>
+      <Text style={styles.welcome}>☆ReactNativeSumupsdk example☆</Text>
+      <Button title="Test" onPress={pressed} />
+      <Button title="setup" onPress={setup} />
+      <Button title="Login" onPress={login} />
+      <Button title="setup and login" onPress={setupAndLogin} />
+      <Button title="Request payment" onPress={requestPayment} />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
