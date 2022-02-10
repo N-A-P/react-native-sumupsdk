@@ -1,6 +1,6 @@
 // ReactNativeSumupsdk.m
 
-#import "ReactNativeSumupsdk.h"
+// #import "ReactNativeSumupsdk.h"
 
 //
 //@implementation ReactNativeSumupsdk

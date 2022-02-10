@@ -16,7 +16,7 @@ const AFFILIATE_API_KEY = 'YOUR_API_KEY';
 const ACCESS_TOKEN = 'ACCESS_TOKEN';
 
 
-export function App() {
+export default function App() {
 
   const pressed = async () => {
     // try {
