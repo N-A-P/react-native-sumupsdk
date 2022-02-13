@@ -41,7 +41,7 @@ class RNSumupSDK: NSObject {
             SumUpSDK.logout { (oke: Bool,err: Error?) in
                 
                 SumUpSDK.login(withToken: token) { (success: Bool, error: Error?) in
-//                    print("2 \(success)")
+                    print("2 \(success)")
 
                     if(success){
                         resolve(true)
@@ -55,7 +55,7 @@ class RNSumupSDK: NSObject {
             
         } else {
             SumUpSDK.login(withToken: token) { (success: Bool, error: Error?) in
-//                print("3 \(success)")
+                // print("3 \(success) \(String(describing: error))")
 
                 if(success){
                     resolve(true)
@@ -71,11 +71,8 @@ class RNSumupSDK: NSObject {
     
     @objc func setupAndLogin(_ key: String ,Token token: String, Resolver resolve:@escaping  RCTPromiseResolveBlock , Rejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
         DispatchQueue.main.async { [self] in
-            print("START")
             SumUpSDK.setup(withAPIKey: key)
-            print("Middle")
             loginWithToken(token, Resolver: resolve, Rejecter: reject)
-            print("END")
 
         }
         
@@ -87,6 +84,7 @@ class RNSumupSDK: NSObject {
             while let presentVC = selfView?.presentedViewController{
                 selfView = presentVC
             }
+            SumUpSDK.login
             SumUpSDK.presentLogin(from: selfView!, animated: true) {(success: Bool, error: Error?) in
                 print("Did present login with success: \(success). Error: \(String(describing: error))")
                 
@@ -106,12 +104,13 @@ class RNSumupSDK: NSObject {
         }
     }
     
-    @objc func requestPayment(_ total: String,Title  title: String?,Skip skipCheckoutScreen: Bool,ForeginID foreignTransactionID: String?, Resolver resolve: @escaping  RCTPromiseResolveBlock , Rejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
+    @objc func requestPayment(_ total: Double,Title  title: String?,Skip skipCheckoutScreen: Bool,ForeginID foreignTransactionID: String?, Resolver resolve: @escaping  RCTPromiseResolveBlock , Rejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
+        // print("params \(skipCheckoutScreen) \(String(describing: foreignTransactionID))")
         guard let merchantCurrencyCode = SumUpSDK.currentMerchant?.currencyCode else {
             reject("NOT_LOGGEDIN", "not logged in",  nil)
             return
         }
-        let request = CheckoutRequest(total: NSDecimalNumber(string: total),
+        let request = CheckoutRequest(total: NSDecimalNumber(value: total),
                                       title: title ?? "",
                                       currencyCode: merchantCurrencyCode)
         if(skipCheckoutScreen){
@@ -123,6 +122,7 @@ class RNSumupSDK: NSObject {
         }
         
         DispatchQueue.main.async {
+            
             var selfView = UIApplication.shared.keyWindow?.rootViewController
             while let presentVC = selfView?.presentedViewController{
                 selfView = presentVC

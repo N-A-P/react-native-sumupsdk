@@ -37,7 +37,7 @@ RCT_EXTERN_METHOD(setupAndLogin:(NSString *)key
                   Resolver:( RCTPromiseResolveBlock) resolve
                   Rejecter:( RCTPromiseRejectBlock) reject)
 
-RCT_EXTERN_METHOD(requestPayment: (NSString *) total
+RCT_EXTERN_METHOD(requestPayment: (double ) total
                   Title: (NSString *) title
                   Skip: (BOOL) skip
                   ForeginID: (NSString *) foreginTransactionID
