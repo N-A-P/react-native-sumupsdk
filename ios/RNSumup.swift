@@ -18,7 +18,14 @@ class RNSumupSDK: NSObject {
     
     @objc
     func constantsToExport() -> [String: Any]! {
-        return ["someKey": "someValue"]
+        return [
+            "NOT_LOGIN": "Not loggin",
+            "INVALID_TOKEN": "Token invalid or expired",
+            "LOGIN_FAILED": "Login failed",
+            "GENERAL": "general error",
+            "CHECKOUT_INPROCESS": "CHECKOUT_INPROCESS",
+            "CANCELED": "User canceled"
+        ]
     }
     
     
@@ -84,7 +91,6 @@ class RNSumupSDK: NSObject {
             while let presentVC = selfView?.presentedViewController{
                 selfView = presentVC
             }
-            SumUpSDK.login
             SumUpSDK.presentLogin(from: selfView!, animated: true) {(success: Bool, error: Error?) in
                 print("Did present login with success: \(success). Error: \(String(describing: error))")
                 
@@ -106,8 +112,9 @@ class RNSumupSDK: NSObject {
     
     @objc func requestPayment(_ total: Double,Title  title: String?,Skip skipCheckoutScreen: Bool,ForeginID foreignTransactionID: String?, Resolver resolve: @escaping  RCTPromiseResolveBlock , Rejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
         // print("params \(skipCheckoutScreen) \(String(describing: foreignTransactionID))")
+        SumUpSDK.prepareForCheckout()
         guard let merchantCurrencyCode = SumUpSDK.currentMerchant?.currencyCode else {
-            reject("NOT_LOGGEDIN", "not logged in",  nil)
+            reject("NOT_LOGIN", "not logged in",  nil)
             return
         }
         let request = CheckoutRequest(total: NSDecimalNumber(value: total),
@@ -134,23 +141,23 @@ class RNSumupSDK: NSObject {
                     if (safeError.domain == SumUpSDKErrorDomain){
                         switch safeError.code {
                         case SumUpSDKError.accountNotLoggedIn.rawValue:
-                            reject("NOT_LOGGEDIN", "not logged in", nil)
+                            reject("NOT_LOGIN", "not logged in", nil)
                         case SumUpSDKError.checkoutInProgress.rawValue:
                             reject("CHECKOUT_INPROCESS", "Checkout in process", nil)
                         case SumUpSDKError.invalidAccessToken.rawValue:
                             reject("INVALID_TOKEN", "invalid token", nil)
                         default:
-                            reject("General", "General Err", nil)
+                            reject("GENERAL", "General Err 1", nil)
                         }
                     } else  {
-                        reject("General", "General Err", nil)
+                        reject("GENERAL", "General Err 2", nil)
                     }
                     return
                 }
                 
                 guard let safeResult = result else {
                     //                    print("no error and no result should not happen")
-                    reject("General", "General Err", nil)
+                    reject("GENERAL", "General Err", nil)
                     return
                 }
                 if safeResult.success {

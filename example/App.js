@@ -19,37 +19,44 @@ const ACCESS_TOKEN = 'ACCESS_TOKEN';
 export default function App() {
 
   const pressed = async () => {
-    // try {
-    // } catch (error) {
-    //   console.log('ERROR', error);
-    // }
+    try {
+      ReactNativeSumupsdk.test( )
+    } catch (error) {
+      console.log('ERROR', error);
+    }
   };
 
   const requestPayment = async () => {
     try {
-      await ReactNativeSumupsdk.requestPayment(
-        '15.4',
-        'Title test',
-        true,
-        `foreginTransactionID ${Math.random()}`, // make sure it unique
-      );
+      await ReactNativeSumupsdk.requestPayment({
+        ammount: 15.4,
+        title: "TITLE test",
+      });
     } catch (error) {
-      console.log('ERROR ', error);
+      // console.log('ERROR ', error);
+      console.log('ERROR login', JSON.stringify(error,null,2));
+      await ReactNativeSumupsdk.loginWithToken({accessToken: "9c219d626aaf993927eff83a27d3db3269c2e325701ab20a81933269d10e9fc8"})
+      await ReactNativeSumupsdk.requestPayment({
+        ammount: 15.4,
+        title: "TITLE test",
+      });
+      
+
     }
   };
 
   const login = async () => {
     try {
-      const res = await ReactNativeSumupsdk.loginWithToken(ACCESS_TOKEN);
+      const res = await ReactNativeSumupsdk.loginWithToken({accessToken:ACCESS_TOKEN});
       console.log(' login ok ', res);
     } catch (error) {
-      console.log('ERROR login', error);
+      console.log('ERROR login', JSON.stringify(error));
     }
   };
 
   const setup = async () => {
     try {
-      const res = await ReactNativeSumupsdk.setupWithKey(AFFILIATE_API_KEY);
+      const res = await ReactNativeSumupsdk.setupWithKey({affiliateKey: AFFILIATE_API_KEY});
       console.log(' Setup ok ', res);
     } catch (error) {
       console.log('ERROR ', error);
@@ -58,9 +65,10 @@ export default function App() {
 
   const setupAndLogin = async () => {
     try {
-      const res = await ReactNativeSumupsdk.setupAndLogin(
-        AFFILIATE_API_KEY,
-        ACCESS_TOKEN,
+      const res = await ReactNativeSumupsdk.setupAndLogin({
+        affiliateKey: AFFILIATE_API_KEY,
+        accessToken: ACCESS_TOKEN,
+      }
       );
       console.log(' Setup and login ok ', res);
     } catch (error) {
@@ -69,7 +77,7 @@ export default function App() {
   };
   return (
     <View style={styles.container}>
-      <Text style={styles.welcome}>☆ReactNativeSumupsdk example☆</Text>
+      <Text style={styles.welcome}>☆ReactNativeSu example☆</Text>
       <Button title="Test" onPress={pressed} />
       <Button title="setup" onPress={setup} />
       <Button title="Login" onPress={login} />
@@ -84,7 +92,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#05FCFF',
   },
   welcome: {
     fontSize: 20,
